@@ -33,11 +33,10 @@
             {{ weather.list[0].weather[0].main }}
           </div>
         </div>
-        <div
-          v-if="weather.list[0].weather[0].main === 'Clouds'"
-          class="animation-container"
-        >
-          <Cloud_Animation />
+        <div class="animation-container">
+          <Cloud_Animation
+            v-if="weather.list[0].weather[0].main === 'Clouds'"
+          />
         </div>
       </div>
     </main>
@@ -118,13 +117,13 @@ body {
 }
 
 main {
-  min-height: 50vh;
+  min-height: 100vh;
   padding: 25px;
 
   background-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.25),
-    rgba(0, 0, 0, 0.5)
+    rgba(0, 0, 0, 0.75)
   );
 }
 
@@ -132,12 +131,6 @@ main {
   height: 50vh;
   width: 100%;
   text-align: center;
-
-  background-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.5),
-    rgba(0, 0, 0, 0.75)
-  );
 }
 
 .search-box {
