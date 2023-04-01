@@ -24,7 +24,7 @@
             {{ weather.city.name }}, {{ weather.city.country }}
           </div>
 
-          <div class="date">{{ dateBuilder() }}</div>
+          <div class="date">{{ getDate() }}</div>
         </div>
 
         <div class="weather-box">
@@ -33,20 +33,33 @@
             {{ weather.list[0].weather[0].main }}
           </div>
         </div>
+        <div
+          v-if="weather.list[0].weather[0].main === 'Clouds'"
+          class="animation-container"
+        >
+          <Cloud_Animation />
+        </div>
       </div>
     </main>
   </div>
 </template>
 
 <script>
+import configData from "./assets/json/config.json";
+import Cloud_Animation from "./components/Cloud_Animation.vue";
+
 export default {
   name: "app",
+  components: {
+    Cloud_Animation,
+  },
   data() {
     return {
       api_key: "d86fb9b75c34da0d5c745dfd66a77b8f",
       url_base: "https://api.openweathermap.org/data/2.5/",
       query: "",
       weather: {},
+      date: configData,
     };
   },
   methods: {
@@ -63,34 +76,13 @@ export default {
     },
     setResults(results) {
       this.weather = results;
-      console.log(results);
-      console.log(results.city.name);
+      console.log(results.list[0].weather[0].main);
     },
-    dateBuilder() {
+
+    getDate() {
       let d = new Date();
-      let months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dez",
-      ];
-      let days = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ];
+      let months = configData.dateData.months;
+      let days = configData.dateData.days;
 
       let day = days[d.getDay()];
       let date = d.getDate();
@@ -103,7 +95,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 * {
   margin: 0;
   padding: 0;
@@ -126,12 +118,24 @@ body {
 }
 
 main {
-  min-height: 100vh;
+  min-height: 50vh;
   padding: 25px;
 
   background-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.25),
+    rgba(0, 0, 0, 0.5)
+  );
+}
+
+.animation-container {
+  height: 50vh;
+  width: 100%;
+  text-align: center;
+
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.5),
     rgba(0, 0, 0, 0.75)
   );
 }
@@ -196,7 +200,7 @@ main {
   text-shadow: 3px 6px rgba(0, 0, 0, 0.25);
   background-color: rgba(255, 255, 255, 0.25);
   border-radius: 16px;
-  margin: 30px 0px;
+  margin: 30px 10px;
 
   box-shadow: 3px 6px rgba(0, 0, 0, 0.25);
 }
